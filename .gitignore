@@ -1,0 +1,7 @@
+build/*
+dist/*
+.idea
+node_modules
+npm-debug*.log
+!.gitkeep
+reports

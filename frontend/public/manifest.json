@@ -1,0 +1,9 @@
+{
+  "name": "TDD Game",
+  "short_name": "TDDGame",
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "landscape",
+  "icons": [
+  ]
+}
