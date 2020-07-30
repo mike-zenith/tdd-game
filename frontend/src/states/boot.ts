@@ -1,7 +1,23 @@
 import Phaser from 'phaser-ce';
-import { STATE_PRELOAD } from '../consts';
+import * as WebFontLoader from 'webfontloader';
+import {
+  IMG_LOADER_FILL,
+  IMG_LOADER_FRAME,
+  STATE_PRELOAD,
+} from '../consts';
+import { Config } from '../config';
 
 export class Boot extends Phaser.State {
+  private ready: boolean;
+
+  private fontsLoaded: boolean;
+
+  private loadingText: Phaser.Text;
+
+  public init(): void {
+    this.onFontsLoaded = this.onFontsLoaded.bind(this);
+  }
+
   public create(): void {
     // set up input max pointers
     this.input.maxPointers = 1;
@@ -42,6 +58,34 @@ export class Boot extends Phaser.State {
     // ScaleMode is not set to RESIZE.
     this.scale.refresh();
 
-    this.game.state.start(STATE_PRELOAD);
+    this.loadingText = this.add.text(this.world.centerX, this.world.centerY, '...', { font: '16px Arial', fill: '#dddddd', align: 'center' });
+    this.loadingText.anchor.setTo(0.5, 0.5);
+  }
+
+  private onFontsLoaded() {
+    this.fontsLoaded = true;
+  }
+
+  public preload(): void {
+    // Load awesome fonts
+    WebFontLoader.load({
+      ...Config.fonts,
+      active: this.onFontsLoaded,
+    });
+
+    this.load.image(IMG_LOADER_FILL, Config.imageMap[IMG_LOADER_FILL]);
+    this.load.image(IMG_LOADER_FRAME, Config.imageMap[IMG_LOADER_FRAME]);
+
+    this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
+  }
+
+  public update(): void {
+    if (this.ready && this.fontsLoaded) {
+      this.game.state.start(STATE_PRELOAD);
+    }
+  }
+
+  private onLoadComplete(): void {
+    this.ready = true;
   }
 }

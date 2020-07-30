@@ -1,23 +1,27 @@
 import Phaser from 'phaser-ce';
-import { STATE_GAME } from '../consts';
+import {
+  IMG_LOADER_FILL, IMG_LOADER_FRAME, IMG_TITLE_BG, STATE_MAINMENU,
+} from '../consts';
+import { Config } from '../config';
 
 export class Preload extends Phaser.State {
-  private ready: boolean;
-
-  public preload(): void {
-    // Load awesome fonts
-    // Load sprites
-
-    this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
+  public init(): void {
+    this.onLoadComplete = this.onLoadComplete.bind(this);
   }
 
-  public update(): void {
-    if (this.ready) {
-      this.game.state.start(STATE_GAME);
-    }
+  public preload(): void {
+    const loaderBg = this.add.sprite(this.game.world.centerX, this.game.world.centerY, IMG_LOADER_FRAME);
+    loaderBg.anchor.setTo(0.5);
+    const loaderBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY, IMG_LOADER_FILL);
+    loaderBar.alignIn(loaderBg, Phaser.TOP_LEFT, 5, 5);
+
+    this.load.setPreloadSprite(loaderBar);
+    this.load.onLoadComplete.add(this.onLoadComplete);
+
+    this.load.image(IMG_TITLE_BG, Config.imageMap[IMG_TITLE_BG]);
   }
 
   private onLoadComplete(): void {
-    this.ready = true;
+    this.game.state.start(STATE_MAINMENU);
   }
 }

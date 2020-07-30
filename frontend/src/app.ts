@@ -8,7 +8,13 @@ import { Config } from './config';
 import { Boot } from './states/boot';
 import { Preload } from './states/preload';
 import { Game } from './states/game';
-import { STATE_BOOT, STATE_GAME, STATE_PRELOAD } from './consts';
+import {
+  STATE_BOOT,
+  STATE_GAME,
+  STATE_MAINMENU,
+  STATE_PRELOAD,
+} from './consts';
+import { MainMenu } from './states/mainmenu';
 
 class Template extends Phaser.Game {
   constructor() {
@@ -17,6 +23,7 @@ class Template extends Phaser.Game {
     this.state.add(STATE_BOOT, Boot, false);
     this.state.add(STATE_PRELOAD, Preload, false);
     this.state.add(STATE_GAME, Game, false);
+    this.state.add(STATE_MAINMENU, MainMenu, false);
 
     this.state.start(STATE_BOOT);
   }
@@ -25,5 +32,4 @@ class Template extends Phaser.Game {
 window.onload = () => {
   // eslint-disable-next-line no-new
   new Template();
-  console.log(Phaser.GAMES);
 };

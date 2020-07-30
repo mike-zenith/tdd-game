@@ -6,11 +6,7 @@ module.exports = {
     canvas: 'canvas',
   },
   commands: [
-    {
-      execute: function (fn) {
-        this.api.execute(fn);
-      }
-    }
+
   ],
   props: {
 

@@ -3,7 +3,7 @@ module.exports = {
    * method before
    * @param browser
    */
-  before: function(browser){
+  before: function (browser) {
     browser.resizeWindow(800, 600);
   },
 
@@ -11,15 +11,13 @@ module.exports = {
    * @test
    * @param client
    */
-  'Phaser game loads MainMenu': function (client) {
+  'MainMenu: multiplayer available': function (client) {
     const page = client.page.mainMenu();
-    page.navigate()
     page
-      .waitForElementPresent('@canvas', 3000)
+      .navigate()
       .waitForPhaser(3000)
       .waitForState('mainmenu', 5000)
-      .assert.currentState('mainmenu');
+      .pauseGame()
+      .assert.gameTextOnScreen('Multiplayer', 5000)
   },
-
-  // 'Preloader shows bitmap'
-};
+}
