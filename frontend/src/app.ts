@@ -2,6 +2,7 @@
 import 'pixi';
 import 'p2';
 import Phaser from 'phaser-ce';
+import 'phaser-input';
 
 import { Config } from './config';
 

@@ -32,7 +32,8 @@
     "outDir": "dist"
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "lib/@azerion/phaser-input/build/phaser-input.d.ts"
   ],
   "exclude": [
     "node_modules"

@@ -3,8 +3,8 @@ const { findPhaserObjectWithName } = require('../custom-commands/_phaserUtil');
 
 exports.assertion = function(expected) {
 
-  const DEFAULT_MSG = 'Testing if Phaser.Text rendered on screen: %s.';
-  const STATE_NOT_FOUND = DEFAULT_MSG + ' ' + 'Text is not rendered.';
+  const DEFAULT_MSG = !this.negate ? 'Testing if Phaser.Text rendered on screen: %s.' : 'Testing if Phaser.Text is NOT rendered on screen: %s.' ;
+  const STATE_NOT_FOUND = DEFAULT_MSG + ' ' + (!this.negate ? 'Text is not rendered.' : 'Text is rendered.');
   /**
    * The message which will be used in the test output and
    * inside the XML reports
@@ -25,7 +25,7 @@ exports.assertion = function(expected) {
    * @type {function}
    */
   this.pass = function(phaserObject) {
-    return !!phaserObject;
+    return !phaserObject === this.negate;
   };
 
   /**
@@ -36,7 +36,7 @@ exports.assertion = function(expected) {
   this.failure = function(result) {
     const failed = (result === false);
     if (failed) {
-      this.message = msg || util.format(STATE_NOT_FOUND, expected);
+      this.message = util.format(STATE_NOT_FOUND, expected);
     }
     return failed;
   };
@@ -58,7 +58,7 @@ exports.assertion = function(expected) {
    */
   this.command = function(callback) {
 
-    return this.api.execute(findPhaserObjectWithName, [expected], callback);
+    return this.api.execute(findPhaserObjectWithName, [expected, !this.negate], callback);
 
   };
 

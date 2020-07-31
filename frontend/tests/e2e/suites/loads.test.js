@@ -7,10 +7,6 @@ module.exports = {
     browser.resizeWindow(800, 600);
   },
 
-  /**
-   * @test
-   * @param client
-   */
   'Phaser game loads MainMenu': function (client) {
     const page = client.page.mainMenu();
     page.navigate()
