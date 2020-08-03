@@ -10,32 +10,7 @@
  * @returns {boolean}
  */
 function findPhaserObjectWithName(name, visibleOnly) {
-  function recursiveGetNamedObject(gameObjects) {
-    for(let i = 0; i<gameObjects.length; i++) {
-      const gameObject = gameObjects[i];
-      if (!gameObject) {
-        continue;
-      }
-      if (gameObject.key && typeof gameObject.key === 'string' && gameObject.key === name) {
-        return gameObject;
-      }
-      if (gameObject.name === name) {
-        return gameObject;
-      }
-      if (gameObject._text === name) {
-        return gameObject;
-      }
-      if (gameObject.children && gameObject.children.length) {
-        const found = recursiveGetNamedObject(gameObject.children);
-        if (found) {
-          return found;
-        }
-      }
-    }
-    return null;
-  }
-
-  const found = recursiveGetNamedObject(window.Phaser.GAMES[0].world.children);
+  const found = window.recursiveGetNamedObject(window.Phaser.GAMES[0].world.children, name);
   if (!found) {
     return false;
   }
@@ -53,36 +28,11 @@ function findPhaserObjectWithName(name, visibleOnly) {
  * @returns {boolean}
  */
 function dispatchPhaserObjectEvent(name, dispatchEvent, dispatchArguments) {
-  function recursiveGetNamedObject(gameObjects) {
-    for(let i = 0; i<gameObjects.length; i++) {
-      const gameObject = gameObjects[i];
-      if (!gameObject) {
-        continue;
-      }
-      if (gameObject.key && typeof gameObject.key === 'string' && gameObject.key === name) {
-        return gameObject;
-      }
-      if (gameObject.name === name) {
-        return gameObject;
-      }
-      if (gameObject._text === name) {
-        return gameObject;
-      }
-      if (gameObject.children && gameObject.children.length) {
-        const found = recursiveGetNamedObject(gameObject.children);
-        if (found) {
-          return found;
-        }
-      }
-    }
-    return null;
-  }
-
-  const found = recursiveGetNamedObject(window.Phaser.GAMES[0].world.children);
+  const found = window.recursiveGetNamedObject(window.Phaser.GAMES[0].world.children, name);
   if (!found) {
     return false;
   }
-  if (found.events[dispatchEvent]) {
+  if (found.events && found.events[dispatchEvent]) {
     found.events[dispatchEvent].dispatch(... dispatchArguments);
     return true;
   }
@@ -99,8 +49,24 @@ function dispatchPhaserObjectEvent(name, dispatchEvent, dispatchArguments) {
 }
 
 function callPhaserObjectEvent(name, method, args) {
-  function recursiveGetNamedObject(gameObjects) {
-    for(let i = 0; i<gameObjects.length; i++) {
+  const found = window.recursiveGetNamedObject(window.Phaser.GAMES[0].world.children, name);
+  if (!found) {
+    return false;
+  }
+  if (!(method in found)) {
+    return false;
+  }
+  found[method].apply(found, args);
+  return true;
+}
+
+module.exports.findPhaserObjectWithName = findPhaserObjectWithName;
+module.exports.dispatchPhaserObjectEvent = dispatchPhaserObjectEvent;
+module.exports.callPhaserObjectEvent = callPhaserObjectEvent;
+
+module.exports.registerObjectFinder = function registerObjectFinder() {
+  this.recursiveGetNamedObject = function recursiveGetNamedObject(gameObjects, name) {
+    for (let i = 0; i < gameObjects.length; i++) {
       const gameObject = gameObjects[i];
       if (!gameObject) {
         continue;
@@ -115,7 +81,7 @@ function callPhaserObjectEvent(name, method, args) {
         return gameObject;
       }
       if (gameObject.children && gameObject.children.length) {
-        const found = recursiveGetNamedObject(gameObject.children);
+        const found = recursiveGetNamedObject(gameObject.children, name);
         if (found) {
           return found;
         }
@@ -123,18 +89,4 @@ function callPhaserObjectEvent(name, method, args) {
     }
     return null;
   }
-
-  const found = recursiveGetNamedObject(window.Phaser.GAMES[0].world.children);
-  if (!found) {
-    return false;
-  }
-  if (!(method in found)) {
-    return false;
-  }
-  found[method].apply(found, args);
-  return true;
 }
-
-module.exports.findPhaserObjectWithName = findPhaserObjectWithName;
-module.exports.dispatchPhaserObjectEvent = dispatchPhaserObjectEvent;
-module.exports.callPhaserObjectEvent = callPhaserObjectEvent;

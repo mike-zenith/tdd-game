@@ -1,6 +1,5 @@
 const path = require('path');
 const { DefinePlugin } = require('webpack');
-
 const ESLintPlugin = require('eslint-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -58,6 +57,7 @@ module.exports = {
     }
   },
   devServer: {
+    hot: false,
     publicPath: '/',
     contentBase: path.join(__dirname, 'public'),
     port: 8000,

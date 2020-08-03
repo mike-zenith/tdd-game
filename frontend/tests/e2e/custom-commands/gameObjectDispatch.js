@@ -71,7 +71,7 @@ gameObjectDispatch.prototype.getProtocolCommand = function (callback) {
     [this.selector.object, this.selector.event, this.selector.args],
     function (result) {
       callback.call(self, result);
-    });
+    })
 };
 
 

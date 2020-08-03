@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "export DEBUG='express:*'; webpack-dev-server --config webpack.dev.config.js -d --inline --hot --progress --port 8000 --host 0.0.0.0 --mode development --color",
+    "start": "webpack-dev-server --config webpack.dev.config.js -d --inline --progress --port 8000 --host 0.0.0.0 --mode development --color",
     "build": "rimraf ./dist && webpack --config webpack.prod.config.js -p --progress --mode production",
     "check-types": "tsc --noemit",
     "lint": "eslint --ext .js,.ts src --color",

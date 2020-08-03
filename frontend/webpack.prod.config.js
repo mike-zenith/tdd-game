@@ -1,11 +1,13 @@
 const path = require('path');
-
+const { DefinePlugin } = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const phaserModule = path.join(__dirname, '/node_modules/phaser-ce/');
 const phaser = path.join(phaserModule, 'build/custom/phaser-arcade-physics.js');
 const pixi = path.join(phaserModule, 'build/custom/pixi.js');
 const p2 = path.join(phaserModule, 'build/custom/p2.js');
+const PhaserInput = path.join(__dirname, '/lib/@azerion/phaser-input/build/phaser-input.js');
 
 module.exports = {
   entry: {
@@ -17,6 +19,14 @@ module.exports = {
     publicPath: '/'
   },
   plugins: [
+    new DefinePlugin({
+      WS_SERVER: process.env.WS_SERVER
+    }),
+    new HtmlWebpackPlugin({
+      template: './public/index.html',
+      inject: 'head',
+      filename: 'index.html',
+    })
   ],
   optimization: {
     splitChunks: {
@@ -38,7 +48,8 @@ module.exports = {
       { test: /\.js?$/, loader: 'eslint-loader', exclude: '/node_modules/' },
       { test: /pixi\.js/, loader: 'expose-loader?PIXI' },
       { test: /phaser\.js/, loader: 'expose-loader?Phaser' },
-      { test: /p2\.js$/, loader: 'expose-loader?p2' }
+      { test: /p2\.js$/, loader: 'expose-loader?p2' },
+      { test: /phaser\-input\.js/, loader: 'expose-loader?PhaserInput', options: { exposes: ['PhaserInput'] }  },
     ]
   },
   resolve: {
@@ -46,7 +57,8 @@ module.exports = {
     alias: {
       'phaser-ce': phaser,
       'pixi': pixi,
-      'p2': p2
+      'p2': p2,
+      'phaser-input': PhaserInput
     }
   }
 };

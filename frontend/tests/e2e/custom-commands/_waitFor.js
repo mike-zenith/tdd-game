@@ -164,7 +164,6 @@ WaitFor.prototype.setMilliseconds = function (timeoutMs) {
     return timeoutMs;
   }
 
-  console.log('globals :: ', this, this.client.api.globals);
   var globalTimeout = this.client.api.globals.waitForConditionTimeout;
   if (typeof globalTimeout !== 'number') {
     throw new Error('waitFor expects second parameter to have a global default ' +

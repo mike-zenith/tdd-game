@@ -12,8 +12,10 @@ export class Game extends Phaser.State {
 
     const socket = io.connect(Config.websocketServerAddress);
     socket.on('connect', () => {
+
     });
     socket.on('disconnect', () => {
+
     });
   }
 
