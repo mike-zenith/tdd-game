@@ -5,7 +5,7 @@ import {
   IMG_LOADER_FRAME,
   STATE_PRELOAD,
 } from '../consts';
-import { Config } from '../config';
+import {Config} from '../config';
 
 export class Boot extends Phaser.State {
   private ready: boolean;
@@ -61,7 +61,7 @@ export class Boot extends Phaser.State {
     this.loadingText = this.add.text(this.world.centerX, this.world.centerY, '...', { font: '16px Arial', fill: '#dddddd', align: 'center' });
     this.loadingText.anchor.setTo(0.5, 0.5);
 
-    this.game.add.plugin((window as unknown).PhaserInput.Plugin);
+    this.game.add.plugin(window.PhaserInput.Plugin);
   }
 
   private onFontsLoaded() {

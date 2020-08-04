@@ -1,4 +1,4 @@
-import SocketIO = require("socket.io");
+import SocketIO from "socket.io";
 
 type Callback = (... args: any[]) => void;
 

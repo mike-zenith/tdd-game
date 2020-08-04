@@ -8,6 +8,15 @@ import {
   FONT_MAINMENU_BUTTON, IMG_BUTTON_MAINMENU_FRAME,
 } from './consts';
 
+declare global {
+  interface Window {
+    WS_SERVER: string
+    PhaserInput: { Plugin: Phaser.Plugin }
+  }
+}
+
+import Phaser from 'phaser-ce';
+
 export class Config {
   static gameWidth = 800;
 
@@ -34,6 +43,6 @@ export class Config {
   };
 
   static get websocketServerAddress(): string {
-    return (window as unknown).WS_SERVER;
+    return window.WS_SERVER;
   }
 }

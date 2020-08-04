@@ -3,7 +3,7 @@ import Socket = SocketIOClient.Socket;
 
 export class Sync {
 
-  private whenConnectedPromise?: Promise<Socket>;
+  private whenConnectedPromise: Promise<Socket>;
   private whenConnectedPromiseReject: (reason?: unknown) => void;
 
   public constructor(private readonly client: Socket) {
@@ -27,16 +27,16 @@ export class Sync {
         this.client.on('connect', () => done(this.client));
       });
     }
-    return this.whenConnectedPromise!;
+    return this.whenConnectedPromise;
   }
 
-  public on(evt: 'closeVote', callback: (room: string, person: string, voteId: string, results: unknown[]) => void): void;
+  public on(evt: 'closeVote', callback: (room: string, person: string, voteId: string, results: (string|boolean)[]) => void): void;
   public on(evt: 'startVote', callback: (room: string, person: string, id: string) => void): void;
 
-  public on(evt: 'closeVote'|'startVote', callback: (...args: unknown[]) => void): void {
-    const evtTransformMap = {
-      closeVote: '/vote/close',
-      startVote: '/vote/ready'
+  public on(evt: string, callback: CallableFunction): void {
+    const evtTransformMap: { [k:string]: string } = {
+      'closeVote': '/vote/close',
+      'startVote': '/vote/ready'
     }
     this.client.on(evtTransformMap[evt], callback);
   }
