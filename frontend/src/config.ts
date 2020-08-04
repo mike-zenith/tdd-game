@@ -9,9 +9,9 @@ import {
 } from './consts';
 
 export class Config {
-  static gameWidth: number = 800;
+  static gameWidth = 800;
 
-  static gameHeight: number = 480;
+  static gameHeight = 480;
 
   static fonts: { google: { families: string[] }} = {
     google: {
@@ -34,6 +34,6 @@ export class Config {
   };
 
   static get websocketServerAddress(): string {
-    return (window as any).WS_SERVER;
+    return (window as unknown).WS_SERVER;
   }
 }

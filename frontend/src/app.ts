@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import 'pixi';
 import 'p2';
 import Phaser from 'phaser-ce';

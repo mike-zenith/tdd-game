@@ -61,7 +61,7 @@ export class Boot extends Phaser.State {
     this.loadingText = this.add.text(this.world.centerX, this.world.centerY, '...', { font: '16px Arial', fill: '#dddddd', align: 'center' });
     this.loadingText.anchor.setTo(0.5, 0.5);
 
-    this.game.add.plugin((window as any).PhaserInput.Plugin);
+    this.game.add.plugin((window as unknown).PhaserInput.Plugin);
   }
 
   private onFontsLoaded() {

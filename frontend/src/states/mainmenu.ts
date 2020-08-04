@@ -96,7 +96,7 @@ export class MainMenu extends Phaser.State {
     return group;
   }
 
-  onMultiplayerClicked() {
+  onMultiplayerClicked(): void {
     if (this.multiplayerSubmenu) {
       this.multiplayerSubmenu.alpha = this.multiplayerSubmenu.alpha > 0.1 ? 0 : 1;
       const input = (this.multiplayerSubmenu.getAt(1) as PhaserInput.InputField);

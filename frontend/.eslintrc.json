@@ -1,10 +1,17 @@
 {
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "jest/globals": true
   },
   "extends": [
-    "airbnb-base"
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:jest/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -17,7 +24,8 @@
     "sourceType": "module"
   },
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "jest"
   ],
   "settings": {
     "import/resolver": {
@@ -59,6 +67,7 @@
         "ignoreComments": true
       }
     ],
-    "no-nested-ternary": "off"
+    "no-nested-ternary": "off",
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }]
   }
 }
