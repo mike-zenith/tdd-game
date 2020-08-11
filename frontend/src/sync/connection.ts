@@ -1,6 +1,10 @@
 import io from 'socket.io-client';
 import Socket = SocketIOClient.Socket;
 
+export type ObjectLiteral = { [k: string]: string|number|boolean|ObjectLiteral };
+
+export type Rules = ObjectLiteral;
+
 export class Sync {
 
   private whenConnectedPromise: Promise<Socket>;
@@ -32,13 +36,20 @@ export class Sync {
 
   public on(evt: 'closeVote', callback: (room: string, person: string, voteId: string, results: (string|boolean)[]) => void): void;
   public on(evt: 'startVote', callback: (room: string, person: string, id: string) => void): void;
+  public on(evt: 'game', callback: (sentGameId: string, rules: Rules, socketId: string) => void): void;
 
   public on(evt: string, callback: CallableFunction): void {
     const evtTransformMap: { [k:string]: string } = {
       'closeVote': '/vote/close',
-      'startVote': '/vote/ready'
+      'startVote': '/vote/ready',
+      'game': '/game',
     }
     this.client.on(evtTransformMap[evt], callback);
+  }
+
+  async game(rules: Rules): Promise<void> {
+    const socket = await this.socket;
+    socket.emit('/game', rules);
   }
 
   async lobby(roomName: string): Promise<void> {

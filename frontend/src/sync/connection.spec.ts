@@ -1,6 +1,6 @@
 import srv from 'socket.io';
 import process from 'process';
-import { Sync, createConnection } from './connection';
+import {Sync, createConnection, Rules} from './connection';
 import { createServer, FakeServer } from '../../tests/fake/server';
 
 process.on('unhandledRejection', (reason, promise) => {
@@ -134,7 +134,7 @@ describe('Connection', function () {
 
       server.on('/vote/ready', id => {
         voteId = id;
-      })
+      });
 
       server.on('/vote/close', id => {
         expect(id).toStrictEqual(voteId);
@@ -177,7 +177,35 @@ describe('Connection', function () {
     });
   });
 
-  // @todo start game
+  test('can start a game', () => {
+    const room = '#r121231';
+    const rules = {'r1': {'i': 1}, 'r2': {'i': 2}};
+
+    client = createConnection(address);
+    client.lobby(room);
+    client.game(rules);
+
+    return Promise.all([
+      new Promise(done => {
+        client.on('game',  (sentGameId: string, rules: Rules, socketId: string) => {
+          expect(rules).toStrictEqual(rules);
+          expect(socketId).toStrictEqual(client.id);
+          done();
+        });
+      }),
+      new Promise(done => {
+        server.on('/game', sentRules => {
+          expect(sentRules).toStrictEqual(rules);
+          done();
+        });
+        server.acceptConnections();
+      }),
+    ]);
+  });
+
+
+
+
   // @todo accept starting position
   // @todo send move vectors
   // @todo receive move vectors
